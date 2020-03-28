@@ -6,6 +6,14 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const {ObjectID} = require('mongodb');
 
+const {Category} = require('./model/category');
+const {Cart} = require('./model/cart');
+const {Merchant} = require('./model/merchant');
+const {Order} = require('./model/order');
+const {Product} = require('./model/product');
+const {Sales} = require('./model/sales');
+const {User} = require('./model/user');
+
 var {authenticate} = require('./middleware/authenticate');
 
 var app = express();
@@ -36,6 +44,7 @@ app.post('/login', async (req, res) => {
         //     }
         // });
     } catch(e) {
+        console.log(e);
         res.status(400).send({
             status: "error",
             message: "Authentication unsuccessful. Please check your login detail."

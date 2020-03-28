@@ -1,3 +1,4 @@
+// require('../config/config');
 const mongoose = require('mongoose');
 const validator = require('validator');
 const jwt = require('jsonwebtoken');
@@ -97,6 +98,7 @@ UserSchema.statics.findByCredentials = function(email, password){
     var User = this;
 
     return User.findOne({email}).then((user) => {
+        console.log(user);
         if(!user) {
             return Promise.reject();
         }
