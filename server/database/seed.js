@@ -264,6 +264,7 @@ const order = async () => {
         var data = [
             {
                 sales: [sales[0]._id, sales[1]._id],
+                user: sales[0].user,
                 quantity: 3,
                 price: 440000,
                 status: "Received"
@@ -274,6 +275,7 @@ const order = async () => {
         data.forEach(orderInfo => {
             var order = new Order({
                 sales: orderInfo.sales,
+                user: orderInfo.user,
                 quantity: orderInfo.quantity,
                 price: orderInfo.price,
                 status: orderInfo.status,
@@ -296,4 +298,4 @@ const order = async () => {
 // product();
 // sales();
 // cart();
-order();
+// order();

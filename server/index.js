@@ -41,6 +41,10 @@ app.get('/invoice/:id', authenticate, async (req, res) => {
     await Sales.invoice(req, res);
 });
 
+app.get('/ordershistory', authenticate, async (req, res) => {
+    await Sales.ordersHistory(req, res);
+});
+
 app.listen(port, () => {
     console.log(`Listening to port ${port}`)
 })
