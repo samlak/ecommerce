@@ -20,7 +20,16 @@ const MerchantSchema = new mongoose.Schema({
         type: String,
         required: false,
         trim: true
+    },
+    created: {
+        type: Date
     }
+});
+
+MerchantSchema.pre('save', function (next) {
+    var merchant = this;
+    merchant.created = new Date();
+    next();
 });
 
 const Merchant = mongoose.model('Merchant', MerchantSchema);

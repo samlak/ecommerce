@@ -17,6 +17,15 @@ const SalesSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    created: {
+        type: Date
+    }
+});
+
+SalesSchema.pre('save', function (next) {
+    var sales = this;
+    sales.created = new Date();
+    next();
 });
 
 const Sales = mongoose.model('Sales', SalesSchema);

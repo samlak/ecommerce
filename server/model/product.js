@@ -32,7 +32,6 @@ const ProductSchema = new mongoose.Schema({
         user: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
-            required: true
         },
         comment: {
             type: String,
@@ -44,13 +43,21 @@ const ProductSchema = new mongoose.Schema({
         user: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
-            required: true
         },
         rating: {
             type: Number,
             required: true,
         }
-    }]
+    }],
+    created: {
+        type: Date
+    }
+});
+
+ProductSchema.pre('save', function (next) {
+    var product = this;
+    product.created = new Date();
+    next();
 });
 
 const Product = mongoose.model('Product', ProductSchema);

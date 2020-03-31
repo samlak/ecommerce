@@ -264,14 +264,20 @@ const order = async () => {
         var data = [
             {
                 sales: [sales[0]._id, sales[1]._id],
+                quantity: 3,
+                price: 440000,
                 status: "Received"
+
             },
         ]
 
         data.forEach(orderInfo => {
             var order = new Order({
                 sales: orderInfo.sales,
-                status: orderInfo.status
+                quantity: orderInfo.quantity,
+                price: orderInfo.price,
+                status: orderInfo.status,
+
             });
             order.save();
         });
@@ -290,4 +296,4 @@ const order = async () => {
 // product();
 // sales();
 // cart();
-// order();
+order();

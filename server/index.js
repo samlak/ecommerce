@@ -1,18 +1,14 @@
 require('./config/config');
 require('./database/connect');
 
-const _ = require('lodash');
 const express = require('express');
 const bodyParser = require('body-parser');
 const {ObjectID} = require('mongodb');
 
-const {Category} = require('./model/category');
-const {Cart} = require('./model/cart');
-const {Merchant} = require('./model/merchant');
-const {Order} = require('./model/order');
-const {Product} = require('./model/product');
-const {Sales} = require('./model/sales');
-const {User} = require('./model/user');
+const Authentication = require('./controller/authentication');
+const Product = require('./controller/product');
+const Merchant = require('./controller/merchant');
+const Sales = require('./controller/sales');
 
 var {authenticate} = require('./middleware/authenticate');
 
@@ -21,35 +17,28 @@ const port = process.env.PORT;
 
 app.use(bodyParser.json());
 
-
-app.get('/', authenticate, (req, res) => {
-    res.status(200).send({
-        status: "success",
-        data: {
-            message: "Welcome"
-        }
-    });
+app.post('/login', async (req, res) => {
+    await Authentication.login(req, res);
 });
 
-app.post('/login', async (req, res) => {
-    try {
-        const body = _.pick(req.body, ['email', 'password']);
-        const user = await User.findByCredentials(body.email, body.password);
-        const token = await user.generateAuthToken();
-        res.header('x-auth', token).send(user);
-        // res.status(200).send({
-        //     status: "success",
-        //     data: {
-        //         message: "Welcome"
-        //     }
-        // });
-    } catch(e) {
-        console.log(e);
-        res.status(400).send({
-            status: "error",
-            message: "Authentication unsuccessful. Please check your login detail."
-        });
-    }
+app.get('/products', authenticate, async (req, res) => {
+    await Product.listProduct(req, res);
+});
+
+app.get('/product/:id', authenticate, async (req, res) => {
+    await Product.getProduct(req, res);
+});
+
+app.get('/merchants', authenticate, async (req, res) => {
+    await Merchant.listMerchant(req, res);
+});
+
+app.get('/merchant/:id', authenticate, async (req, res) => {
+    await Merchant.getMerchant(req, res);
+});
+
+app.get('/invoice/:id', authenticate, async (req, res) => {
+    await Sales.invoice(req, res);
 });
 
 app.listen(port, () => {
