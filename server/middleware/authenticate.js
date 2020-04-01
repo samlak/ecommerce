@@ -18,4 +18,21 @@ var authenticate = (req, res, next) => {
     });
 };
 
-module.exports = {authenticate}
+var isMerchant = (req, res, next) => {
+    var token = req.header('x-auth');
+
+    User.findByToken(token).then((user) => {
+        var role = user.role.includes("Merchant");
+        if(!role){
+            return Promise.reject();
+        }
+        next();
+    }).catch((e) => {
+        res.status(401).send({
+            status: "error",
+            message: "Opps! You must be a Merchant to access this page. Contact the admin for more info."
+        });
+    });
+};
+
+module.exports = {authenticate, isMerchant}

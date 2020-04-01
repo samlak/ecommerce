@@ -1,10 +1,10 @@
-const _ = require('lodash');
 const {ObjectID} = require('mongodb');
 
 const {Merchant} = require('../model/merchant');
 const {Product} = require('../model/product');
 const {Category} = require('../model/category');
 const {User} = require('../model/user');
+const {Sales} = require('../model/sales');
 
 const fetchProduct = async (id) => {
     const product = await Product.findOne({merchant: id});
@@ -107,4 +107,28 @@ const getMerchant = async (req, res) => {
     }
 }
 
-module.exports = {listMerchant, getMerchant}
+const merchantSummary = async (req, res) => {
+    try {        
+        const merchantID = req.user._id;
+
+        var sales = await Sales.find().select("-user -_id").
+            populate({
+                path: "product",
+                match: {}
+            });
+        res.status(200).send({
+            status: "success",
+            data: {
+                merchants: sales
+            }
+        });
+    } catch(e) {
+        console.log(e);
+        res.status(400).send({
+            status: "error",
+            message: "Merchant summary can\'t be fetched"
+        });
+    }
+}
+
+module.exports = {listMerchant, getMerchant, merchantSummary}

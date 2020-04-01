@@ -21,11 +21,11 @@ const UserSchema = new mongoose.Schema({
             message: '{VALUE} is not valid email'
         }
     },
-    role: {
+    role: [{
         type: String,
         required: true,
         trim: true
-    },
+    }],
     image: {
         type: String,
         required: false,

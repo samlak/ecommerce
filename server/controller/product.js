@@ -1,4 +1,3 @@
-const _ = require('lodash');
 const {ObjectID} = require('mongodb');
 
 const {Product} = require('../model/product');

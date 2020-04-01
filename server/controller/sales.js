@@ -1,8 +1,7 @@
-const _ = require('lodash');
 const {ObjectID} = require('mongodb');
 
 const {Order} = require('../model/order');
-const {Product} = require('../model/product');
+const {Cart} = require('../model/cart');
 const {Sales} = require('../model/sales');
 
 const invoice = async (req, res) => {
@@ -22,7 +21,7 @@ const invoice = async (req, res) => {
             for(var i = 0; i < order.sales.length; i++){
                 var sales = await Sales.findById(order.sales[i]).
                     select('-user -_id -created').
-                    populate('product', 'name -_id');
+                    populate('product', 'name');
                 salesInfo.push(sales);
             }
 
@@ -71,4 +70,25 @@ const ordersHistory = async (req, res) => {
     }
 }
 
-module.exports = {invoice, ordersHistory}
+const cart = async (req, res) => {
+    try {
+        const authenticatedUser = req.user._id;
+        var cart = await Cart.find({user: authenticatedUser}).select("-user").
+            populate('product', 'name');
+            
+        res.status(200).send({
+            status: "success",
+            data: {
+                cart: cart.length != 0 ? cart : "You do not have any item in your cart"
+            }
+        });
+    } catch(e) {
+        console.log(e);
+        res.status(400).send({
+            status: "error",
+            message: "Error fetching cart information"
+        });
+    }
+}
+
+module.exports = {invoice, ordersHistory, cart}

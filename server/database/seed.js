@@ -45,21 +45,21 @@ const user = async () => {
             {
                 name: "Salami Haruna",
                 email: "samlak@dev.com",
-                role: "Admin",
+                role: ["Admin", "Merchant"],
                 image: "SSAA01-1.jpg",
                 password: "password"
             },
             {
                 name: "Salami Olalekan",
                 email: "sam@lak.dev",
-                role: "Merchant",
+                role: ["Merchant"],
                 image: "SSAA01-1.jpg",
                 password: "password"
             },
             {
                 name: "Dev Samlak",
                 email: "dev@samlak.io",
-                role: "User",
+                role: ["User"],
                 image: "SSAA01-1.jpg",
                 password: "password"
             }
@@ -85,20 +85,24 @@ const user = async () => {
 const merchant = async () => {
     try {
         var categories = await Category.find();
+        var users = await User.find();
         var data = [
             {
+                user: users[0]._id,
                 name: "Apple",
                 description: "Official store for Apple Inc",
                 category: categories[1]._id,
                 logo: "SSAA01-2.jpg"
             },
             {
+                user: users[0]._id,
                 name: "Techno",
                 description: "Official store for Techno Inc",
                 category: categories[1]._id,
                 logo: "SSAA01-2.jpg"
             },
             {
+                user: users[2]._id,
                 name: "Bella Naija",
                 description: "Official store for Bella Naija Inc",
                 category: categories[0]._id,
@@ -215,6 +219,24 @@ const sales = async () => {
                 quantity: 1,
                 price: 400000,
             },
+            {
+                user: users[1]._id,
+                product: products[2]._id,
+                quantity: 10,
+                price: 40000,
+            },
+            {
+                user: users[1]._id,
+                product: products[1]._id,
+                quantity: 1,
+                price: 400000,
+            },
+            {
+                user: users[0]._id,
+                product: products[0]._id,
+                quantity: 5,
+                price: 400000,
+            },
         ]
 
         data.forEach(salesInfo => {
@@ -268,6 +290,22 @@ const order = async () => {
                 quantity: 3,
                 price: 440000,
                 status: "Received"
+
+            },
+            {
+                sales: [sales[2]._id, sales[3]._id],
+                user: sales[2].user,
+                quantity: 11,
+                price: 800000,
+                status: "Delivered"
+
+            },
+            {
+                sales: [sales[4]._id],
+                user: sales[4].user,
+                quantity: 5,
+                price: 2000000,
+                status: "Processing"
 
             },
         ]
