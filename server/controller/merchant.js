@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const {ObjectID} = require('mongodb');
 
 const {Merchant} = require('../model/merchant');
@@ -109,17 +110,61 @@ const getMerchant = async (req, res) => {
 
 const merchantSummary = async (req, res) => {
     try {        
-        const merchantID = req.user._id;
+        const userID = req.user._id;
+        const merchant = await Merchant.findOne({user: userID});
 
         var sales = await Sales.find().select("-user -_id").
             populate({
                 path: "product",
-                match: {}
+                select: ('merchant name')
             });
+        var modifiedSales = [];
+        for(var i = 0; i < sales.length; i++){
+            if(_.isEqual(sales[i].product.merchant, merchant._id)){
+                modifiedSales.push(sales[i]);
+            }
+        }
+        
+        var valArr = modifiedSales.map((item) => {
+            return item.product.name;
+        });
+        
+        var newSales = [];
+        modifiedSales.some((item, idx) => {  
+            
+            var ih = valArr.indexOf(item.product.name) != idx;
+            if(!ih){
+                newSales.push(item);
+            }else{
+                var x = newSales.filter((product => product.product.name == item.product.name)).
+                    map((ne) => {
+                        // console.log(ne.quantity + item.quantity)
+                        return ne.quantity + item.quantity
+                    });
+                // x[0].quantity = x[0].quantity + item.quantity;
+                
+                // newSales.push(item);
+                console.log(x);
+            }
+        });
+        // console.log(newSales);
+        // valArr.some((item, idx) => {
+        //     console.log(valArr.indexOf(item));
+        //     var ih = valArr.indexOf(item) != idx;
+        //     console.log(ih);
+        // })
+    
+        
+        var summary = [];
+        for(var i = 0; i < modifiedSales.length; i++){
+            modifiedSales.filter((salesRecord) => {
+                return salesRecord.product._id 
+            })
+        }
         res.status(200).send({
             status: "success",
             data: {
-                merchants: sales
+                sales: modifiedSales
             }
         });
     } catch(e) {

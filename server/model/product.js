@@ -23,11 +23,11 @@ const ProductSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    image: {
+    image: [{
         type: String,
         required: true,
         trim: true, 
-    },
+    }],
     review: [{
         user: {
             type: mongoose.Schema.Types.ObjectId,

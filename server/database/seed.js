@@ -112,6 +112,7 @@ const merchant = async () => {
 
         data.forEach(merchantInfo => {
             var merchant = new Merchant({
+                user: merchantInfo.user,
                 name: merchantInfo.name,
                 description: merchantInfo.description,
                 category: merchantInfo.category,
@@ -137,7 +138,7 @@ const product = async () => {
                 description: "This is the description of a perfect product from the best seller ever",
                 quantity: 10,
                 price: 45000,
-                image: "SSAA01-3.jpg",
+                image: ["SSAA01-3.jpg"],
                 review: [
                     {
                         user: users[2]._id,
@@ -161,7 +162,7 @@ const product = async () => {
                 description: "This is the description of a perfect product from the best seller ever",
                 quantity: 10,
                 price: 450000,
-                image: "SSAA01-3.jpg",
+                image: ["SSAA01-3.jpg"],
                 review: [],
                 rating: [
                     {
@@ -171,12 +172,12 @@ const product = async () => {
                 ]
             },
             {
-                merchant: merchants[2]._id,
+                merchant: merchants[0]._id,
                 name: "Think and grow rich",
                 description: "This is the description of a perfect product from the best seller ever",
                 quantity: 10,
                 price: 20000,
-                image: "SSAA01-3.jpg",
+                image: ["SSAA01-3.jpg"],
                 review: [],
                 rating: []
             }
